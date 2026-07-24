@@ -1,0 +1,81 @@
+---
+description: LRV Broadcast Calendar prototype — full feature spec for Cursor development
+alwaysApply: true
+---
+
+# LRV Broadcast Calendar Spec
+
+## Stack
+React 19, Vite, Tailwind v4, Redux Toolkit, React Router. Mock APIs only.
+
+## State Management (Redux)
+
+Use Redux for all LRV screen state. Do NOT add useState in LrvPage for events/selection/modal.
+
+```
+src/store/
+  index.js           — configureStore
+  hooks.js           — useAppDispatch, useAppSelector
+  slices/eventsSlice.js  — present/past/future undo stacks
+  slices/uiSlice.js      — selection, modal, zoom, quarters, tooltip
+  slices/appSlice.js     — dayParts, legend
+  thunks/eventThunks.js  — async event CRUD + loadEventsForQuarters
+```
+
+Event changes MUST use `applyChange` (via thunks) to preserve undo/redo.
+
+## Implemented Features
+
+### Layout
+- LrvHeader: logos, Food dropdown, Help, Bell, Export
+- LrvToolbar: LRV_Grid, undo/redo (disabled when empty), day part, tooltip toggle, session count
+- LrvFooter: Hours Count legend
+
+### Calendar Grid
+- Sticky scroll-synced CalendarHeader (quarter/month/week)
+- 7 day rows, 30-min slots, horizontal scroll
+- Zoom +/- bottom-right (75%–175%)
+- Lazy load next quarter on scroll right; show `ScrollLoadingIndicator` with year label
+
+### Events
+- EventBlock: title bar + per-week episode cells
+- Drag move, resize width/height
+- ConflictOverlay: pink/blue hatch (seed data demo only)
+- 800 conflict-free bulk events + 10 seed events
+
+### Interactions
+- Pointer-based cell drag selection (`useGridSelection` + rAF)
+- SelectionActionBar → Create Event modal
+- Right-click: Copy, Paste, Add to Grid, Move to Bin, Delete
+- Tooltip at click position (toggleable)
+- Double-click cell or event → modal
+
+### Collaboration
+- `useSessionPresence`: localStorage tab sessions, heartbeat 3s
+- Toolbar shows "N sessions active" + avatars
+- Peer cell highlights from other tabs
+
+## API Conventions
+
+- `fetchBroadcastEvents(dayPartId, quarters)` — quarter-filtered
+- `fetchQuarterWeeks('1Q28')` — any NQYY format
+- Bulk: `generateBulkBroadcastEvents(800)` — single-week, no conflicts
+- Field docs: `docs/spec/API-FIELDS.md`
+
+## Grid Constants
+
+Defined in `src/utils/broadcastCalendar.js`:
+`WEEK_COL_WIDTH=72`, `SLOT_HEIGHT=22`, `EVENT_MIN_DISPLAY_HEIGHT=40`
+
+## Do Not
+
+- Add toast-ui calendar (removed; React 19 incompatible)
+- Load all 800+ events without quarter filter
+- Store events in component useState (use Redux)
+- Create multi-week bulk events that share day+time lanes (causes conflicts)
+
+## Docs to Update When Changing
+
+- `docs/spec/IMPLEMENTATION.md`
+- `docs/spec/API-FIELDS.md` (new fields)
+- `AGENTS.md` (architecture changes)

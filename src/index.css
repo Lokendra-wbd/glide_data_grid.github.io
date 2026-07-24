@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lrv-grid-scroll {
+  overflow-x: scroll;
+  scrollbar-gutter: stable;
+}
+
+.lrv-grid-scroll::-webkit-scrollbar {
+  height: 12px;
+}
+
+.lrv-grid-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+
+.lrv-grid-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}

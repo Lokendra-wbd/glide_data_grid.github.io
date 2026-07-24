@@ -12,7 +12,7 @@ function githubPagesBase() {
     if (!pathname || pathname === '/') return '/'
     return pathname.endsWith('/') ? pathname : `${pathname}/`
   } catch {
-    return '/glide_data_grid.github.io/'
+    return '/glide_data_grid/'
   }
 }
 

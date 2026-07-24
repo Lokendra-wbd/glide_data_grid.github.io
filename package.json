@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Lokendra-wbd/glide_data_grid",
+  "homepage": "https://Lokendra-wbd.github.io/glide_data_grid",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/copy-404.mjs",
